@@ -56,4 +56,7 @@ data_plot <- ggplot(data=final_data, mapping = aes(x=dem_this_margin, y=cases_pe
   theme_few()
   
 data_plot
+ggsave(filename = "scatter.png",
+       width = 10,
+       height = 7.5)
   
