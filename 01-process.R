@@ -67,7 +67,7 @@ data_plot <- ggplot(data=final_data, mapping = aes(x=dem_this_margin, y=perc_inf
   geom_point() +
   geom_text_repel(aes(label=stateid)) +
   geom_smooth(method = "lm", se = FALSE, color = "darkgray") +
-  labs(title="Infection Percentage of Popluation by Democratic Vote Margin",
+  labs(title="Infection Percentage of Population by Democratic Vote Margin",
        caption = "Source code available: https://github.com/nickchitwood/PartisanShipCOVID") +
   geom_vline(xintercept = 0, color = "gray", linetype = "dashed") +
   theme_few()
