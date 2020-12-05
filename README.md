@@ -1,8 +1,10 @@
 # Basic analysis of COVID Data
 
-_Data visualization choices matter._ 
+_TL,DR: Data visualization choices matter._ 
 
 I had a friend post an interesting visualization that told a story about COVID-19 rates of infection and voter spread in the most recent election. The bar chart is pretty dramatic, and the way it clusters all of the "red" states together seems to be a pretty clear condemnation of the likely policies in those states.
+
+![](original.jpg)
 
 However, the interesting choice was how to represent the two continuous variables: % of population with COVID, and victory margin. Population with COVID is the length of the bar, but the victory margin is represented as a color. This is weird, because usually two continuous variables are represented by a scatter plot. So I made one.
 
