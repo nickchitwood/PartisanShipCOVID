@@ -27,7 +27,7 @@ covid_recent <- covid_daily %>%
 covid_avg_7_days <- covid_recent %>%
   filter(`date` %in% dates) %>%
   group_by(fips) %>%
-  summarize(avg_cases = mean(new_cases), avg_deaths = mean(new_deaths))
+  summarize(avg_cases = mean(new_cases), avg_deaths = mean(new_deaths), total_cases = last(cases))
 
 # Get Census Count
 download.file('https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/national/totals/nst-est2019-alldata.csv',
@@ -40,7 +40,8 @@ final_data <-
   election_states %>% 
   left_join(census %>% select(State_num = STATE, population = POPESTIMATE2019)) %>%
   left_join(covid_avg_7_days %>% rename(State_num = fips), by="State_num") %>%
-  mutate(cases_per_100000 = avg_cases / population * 100000)
+  mutate(cases_per_100000 = avg_cases / population * 100000,
+         perc_infected = total_cases / population * 100)
 
 # Model
 rate_model <- lm(cases_per_100000 ~ dem_this_margin, data = final_data)
@@ -57,7 +58,21 @@ data_plot <- ggplot(data=final_data, mapping = aes(x=dem_this_margin, y=cases_pe
   theme_few()
   
 data_plot
-ggsave(filename = "scatter.png",
+ggsave(filename = "scatter_rate_100.png",
        width = 10,
        height = 7.5)
-  
+
+# Plot percent version  
+data_plot <- ggplot(data=final_data, mapping = aes(x=dem_this_margin, y=perc_infected)) +
+  geom_point() +
+  geom_text_repel(aes(label=stateid)) +
+  geom_smooth(method = "lm", se = FALSE, color = "darkgray") +
+  labs(title="Infection Percentage of Popluation by Democratic Vote Margin",
+       caption = "Source code available: https://github.com/nickchitwood/PartisanShipCOVID") +
+  geom_vline(xintercept = 0, color = "gray", linetype = "dashed") +
+  theme_few()
+
+data_plot
+ggsave(filename = "scatter_percent.png",
+       width = 10,
+       height = 7.5)
